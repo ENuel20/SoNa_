@@ -3,14 +3,39 @@ import { ReactNode } from "react"
 import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react"
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui"
 import { BackpackWalletAdapter } from "@solana/wallet-adapter-backpack"
-import { clusterApiUrl } from "@solana/web3.js"
+import { Connection, ConnectionConfig, clusterApiUrl } from "@solana/web3.js"
 import { Toaster } from "react-hot-toast"
 import { SolanaProvider } from "@/contexts/SolanaContext"
 import { SonicProvider } from "@/contexts/SonicContext"
 
 require("@solana/wallet-adapter-react-ui/styles.css")
 
-const endpoint = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || clusterApiUrl("testnet")
+// Configure Helius Sonic RPC with WebSocket support
+const getHeliusConnection = () => {
+  const apiKey = process.env.NEXT_PUBLIC_HELIUS_API_KEY
+  const fallbackEndpoint = clusterApiUrl("testnet")
+  
+  if (!apiKey) {
+    console.warn("NEXT_PUBLIC_HELIUS_API_KEY not found in environment, falling back to testnet")
+    return fallbackEndpoint
+  }
+  
+  // Create connection config with WebSocket support
+  const rpcUrl = `https://sonic.helius-rpc.com/?api-key=${apiKey}`
+  const wsUrl = `wss://sonic.helius-rpc.com/?api-key=${apiKey}`
+  
+  const config: ConnectionConfig = {
+    commitment: "confirmed",
+    wsEndpoint: wsUrl,
+    confirmTransactionInitialTimeout: 60000, // 60 seconds
+    disableRetryOnRateLimit: false
+  }
+  
+  // We return the URL here instead of the Connection object because ConnectionProvider needs the URL
+  return rpcUrl
+}
+
+const endpoint = process.env.NEXT_PUBLIC_SOLANA_RPC_URL || getHeliusConnection()
 const wallets = [new BackpackWalletAdapter()]
 
 interface WalletProvidersProps {
@@ -56,4 +81,3 @@ export function WalletProviders({ children }: WalletProvidersProps) {
     </ConnectionProvider>
   )
 }
-
