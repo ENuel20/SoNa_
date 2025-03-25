@@ -1,22 +1,13 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { Providers } from "@/providers/Providers"
-import { Toaster } from "react-hot-toast"
+import { Providers } from "./providers"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Sona - Your AI Crypto Assistant",
-  description: "AI-powered crypto assistant for Solana and SONIC",
-  icons: {
-    icon: [
-      {
-        url: "/favicon.ico",
-        sizes: "any"
-      }
-    ]
-  }
+  title: "Sona - Your AI Assistant for DeFi and Solana",
+  description: "Chat with Sona about your portfolio, prices, and transactions on Solana.",
 }
 
 export default function RootLayout({
@@ -25,11 +16,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
           {children}
-          <Toaster position="bottom-right" />
         </Providers>
       </body>
     </html>

@@ -20,7 +20,7 @@ export function useChat() {
       // Prepare wallet info
       const walletInfo = solana.publicKey ? {
         solBalance: solana.balance,
-        solPrice: null, // This will be fetched from CoinGecko in the API
+        solPrice: solana.solPrice, // Get SOL price from Pyth Network
         sonicBalance: sonic.sonicBalance,
         sonicPrice: sonic.sonicPrice
       } : null
