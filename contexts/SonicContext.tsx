@@ -143,39 +143,26 @@ export function SonicProvider({ children }: { children: ReactNode }) {
       // Create Pyth client
       const pythConnection = new PythHttpClient(
         connection, 
-        getPythProgramKeyForCluster("testnet")
+        getPythProgramKeyForCluster("mainnet-beta")
       );
       
       // Get price feed data
       const priceData = await pythConnection.getData();
       
-      // For demo purposes, we'll use SOL/USD as a placeholder for SONIC price
-      // In production, you would use the actual SONIC price feed ID
-      const priceAccount = priceData.productPrice.get(PYTH_SOL_USD_PRICE_ACCOUNT);
+      // Get SOL/USD price feed
+      const priceAccount = priceData.productPrice.get("Crypto.SOL/USD");
       
       if (!priceAccount || priceAccount.price === undefined || priceAccount.confidence === undefined) {
         console.error('Invalid Pyth price data');
         throw new Error('Invalid price data from Pyth Network');
       }
       
-      // Check if the price is valid
-      if (priceAccount.priceStatus !== PriceStatus.TRADING) {
-        console.warn('Price feed not currently trading:', priceAccount.priceStatus);
-      }
-      
       const price = priceAccount.price;
-      // Apply a multiplier to simulate SONIC price (for demo purposes)
-      const sonicPriceSimulated = price * 0.01; // Just as an example
-      
-      console.log('Fetched SONIC price from Pyth:', sonicPriceSimulated);
-      setSonicPrice(sonicPriceSimulated);
-      return sonicPriceSimulated;
+      setSonicPrice(price);
+      return price;
     } catch (error: unknown) {
       console.error('Error fetching SONIC price from Pyth Network:', error);
-      // Use a default price as fallback
-      const defaultPrice = 0.05;
-      setSonicPrice(defaultPrice);
-      return defaultPrice;
+      throw error;
     }
   };
 

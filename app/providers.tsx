@@ -8,7 +8,7 @@ import { SolanaProvider } from "@/contexts/SolanaContext"
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-      <SolanaProvider solPrice={null}>
+      <SolanaProvider>
         <SonicProvider>
           {children}
         </SonicProvider>

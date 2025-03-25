@@ -24,7 +24,7 @@ declare const window: BackpackWindow
 
 interface SolanaContextType {
   balance: number | null
-  solPrice: number | null
+  solPrice?: number | null
   fetchBalance: (address: PublicKey) => Promise<number>
   sendSol: (recipient: string, amount: string) => Promise<string | null>
   transactions: Array<{ hash: string; amount: string; date: Date }>
@@ -39,10 +39,10 @@ const SolanaContext = createContext<SolanaContextType | undefined>(undefined)
 
 export function SolanaProvider({ 
   children,
-  solPrice: externalSolPrice 
+  solPrice
 }: { 
   children: ReactNode
-  solPrice: number | null
+  solPrice?: number | null
 }) {
   const [publicKey, setPublicKey] = useState<PublicKey | null>(null)
   const [balance, setBalance] = useState<number | null>(null)
@@ -264,7 +264,7 @@ export function SolanaProvider({
     <SolanaContext.Provider
       value={{
         balance,
-        solPrice: externalSolPrice,
+        solPrice,
         fetchBalance,
         sendSol,
         transactions,

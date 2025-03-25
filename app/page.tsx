@@ -103,31 +103,6 @@ export default function Home() {
               </div>
 
               <div className="flex items-center gap-4">
-                {activeTab === "chat" && (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => {
-                        setActiveTab("chat")
-                        window.location.reload()
-                      }}
-                      className="text-zinc-400 hover:text-white"
-                    >
-                      <Plus className="h-5 w-5" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => {
-                        // TODO: Implement chat history view
-                      }}
-                      className="text-zinc-400 hover:text-white"
-                    >
-                      <History className="h-5 w-5" />
-                    </Button>
-                  </>
-                )}
                 <BackpackWalletConnect />
               </div>
             </div>
